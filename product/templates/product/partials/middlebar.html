@@ -1,0 +1,103 @@
+{% load static %}
+
+<div class="header-middle">
+	<div class="container">
+		<div class="row align-items-center">
+			<div class="col-5 col-lg-3 col-xl-3">
+				<div class="header-middle-logo">
+					<a class="navbar-brand" href="{% url 'product:index' %}">
+						<img src="{% static 'product/assets/img/logo/logo.png' %}" alt="logo">
+					</a>
+				</div>
+			</div>
+			<div class="d-none d-lg-block col-lg-6 col-xl-5">
+				<div class="header-middle-search">
+					<form action="index.html#">
+						<div class="search-content">
+							<select class="select">
+								<option value="">All Category</option>
+								<option value="1">Today's Hot Deals</option>
+								<option value="2">Fashion & Accessories</option>
+								<option value="3">Electronics</option>
+								<option value="4">Grocery & Market</option>
+								<option value="5">Music</option>
+								<option value="6">Home & Furniture</option>
+								<option value="7">Toy & Video Games</option>
+								<option value="8">Gifts</option>
+								<option value="9">Babies & Moms</option>
+								<option value="10">Sports & Outdoor</option>
+								<option value="11">Health & Beauty</option>
+							</select>
+							<input type="text" class="form-control" placeholder="Search Here...">
+							<button type="submit" class="search-btn"><i class="far fa-search"></i></button>
+						</div>
+					</form>
+				</div>
+			</div>
+			<div class="col-7 col-lg-3 col-xl-4">
+				<div class="header-middle-right">
+					<ul class="header-middle-list">
+						<li><a href="index.html#" class="list-item"><i class="far fa-user-circle"></i></a></li>
+						<li><a href="index.html#" class="list-item"><i class="far fa-arrows-rotate"></i><span>0</span></a></li>
+						<li><a href="index.html#" class="list-item"><i class="far fa-heart"></i><span>0</span></a></li>
+						<li class="dropdown-cart">
+							<a href="index.html#" class="shop-cart list-item"><i class="far fa-shopping-bag"></i>
+								<span>5</span></a>
+							<div class="dropdown-cart-menu">
+								<div class="dropdown-cart-header">
+									<span>03 Items</span>
+									<a href="index.html#">View Cart</a>
+								</div>
+								<ul class="dropdown-cart-list">
+									<li>
+										<div class="dropdown-cart-item">
+											<div class="cart-img">
+												<a href="index.html#"><img src="{% static 'product/assets/img/product/p47.png' %}" alt="#"></a>
+											</div>
+											<div class="cart-info">
+												<h4><a href="index.html#">Xamaha R15 Red</a></h4>
+												<p class="cart-qty">1x - <span class="cart-amount">$200.00</span></p>
+											</div>
+											<a href="index.html#" class="cart-remove" title="Remove this item"><i class="far fa-times-circle"></i></a>
+										</div>
+									</li>
+									<li>
+										<div class="dropdown-cart-item">
+											<div class="cart-img">
+												<a href="index.html#"><img src="{% static 'product/assets/img/product/p12.png' %}" alt="#"></a>
+											</div>
+											<div class="cart-info">
+												<h4><a href="index.html#">Apple Blue Watch</a></h4>
+												<p class="cart-qty">1x - <span class="cart-amount">$120.00</span></p>
+											</div>
+											<a href="index.html#" class="cart-remove" title="Remove this item"><i class="far fa-times-circle"></i></a>
+										</div>
+									</li>
+									<li>
+										<div class="dropdown-cart-item">
+											<div class="cart-img">
+												<a href="index.html#"><img src="{% static 'product/assets/img/product/p32.png' %}" alt="#"></a>
+											</div>
+											<div class="cart-info">
+												<h4><a href="index.html#">Orange Sweater</a></h4>
+												<p class="cart-qty">1x - <span class="cart-amount">$330.00</span></p>
+											</div>
+											<a href="index.html#" class="cart-remove" title="Remove this item"><i class="far fa-times-circle"></i></a>
+										</div>
+									</li>
+								</ul>
+								<div class="dropdown-cart-bottom">
+									<div class="dropdown-cart-total">
+										<span>Total</span>
+										<span class="total-amount">$650.00</span>
+									</div>
+									<a href="index.html#" class="theme-btn">Checkout</a>
+								</div>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

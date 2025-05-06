@@ -1,0 +1,175 @@
+{% extends "product/layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- breadcrumb -->
+<div class="site-breadcrumb">
+    <div class="site-breadcrumb-bg" style="background: url(assets/img/breadcrumb/01.jpg)"></div>
+    <div class="container">
+        <div class="site-breadcrumb-wrap">
+            <h4 class="breadcrumb-title">Shop Grid One</h4>
+            <ul class="breadcrumb-menu">
+                <li><a href="index.html"><i class="far fa-home"></i> Home</a></li>
+                <li class="active">Shop Grid One</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- breadcrumb end -->
+
+<!-- shop-area -->
+<div class="shop-area py-100">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="shop-sidebar">
+                    <div class="shop-widget">
+                        <div class="shop-search-form">
+                            <h4 class="shop-widget-title">Search</h4>
+                            <form action="shop-grid.html#">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Search">
+                                    <button type="search"><i class="far fa-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="shop-widget">
+                        <h4 class="shop-widget-title">Category</h4>
+                        <ul class="shop-category-list">
+                            {% for category in categories %}
+                            <li><a href="{{ category.get_absolute_url }}">{{ category.name }}<span>({{category.product_count}})</span></a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="col-md-12">
+                    <div class="shop-sort">
+                        <div class="shop-sort-box">
+                            <div class="shop-sorty-label">Sort By:</div>
+                            <select class="select">
+                                <option value="1">Default Sorting</option>
+                                <option value="5">Latest Items</option>
+                                <option value="2">Best Seller Items</option>
+                                <option value="3">Price - Low To High</option>
+                                <option value="4">Price - High To Low</option>
+                            </select>
+                            <div class="shop-sort-show">Showing 1-10 of 50 Results</div>
+                        </div>
+                        <div class="shop-sort-gl">
+                            <a href="shop-grid.html" class="shop-sort-grid active"><i class="far fa-grid-round-2"></i></a>
+                            <a href="shop-list.html" class="shop-sort-list"><i class="far fa-list-ul"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="shop-item-wrapper">
+                    <div class="row">
+                        {% for product in products.all %}
+                        <div class="col-md-6 col-lg-4">
+                            <div class="product-item">
+                                <div class="product-img">
+                                    <span class="type new">New</span>
+                                    {% if product.discount_value %}
+                                    <span class="type discount">{{ product.discount_value }}% OFF</span>
+                                    {% endif %}
+                                    {% if product.poster %}
+                                    <img src="{{ product.poster.url }}" alt="">
+                                    {% else %}
+                                    <img src="{% static 'product/assets/img/icon/no_image.svg' %}" alt="">
+                                    {% endif %}
+                                    <div class="product-action-wrap">
+                                        <div class="product-action">
+                                            <a href="index.html#" data-tooltip="tooltip" title="Add To Wishlist"><i class="far fa-heart"></i></a>
+                                            <a href="index.html#" data-tooltip="tooltip" title="Add To Compare"><i class="far fa-arrows-repeat"></i></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-content">
+                                    <h3 class="product-title">
+                                        <a href="{{ product.get_absolute_url }}">{{ product.name|truncatechars:20 }}</a>
+                                    </h3>
+                                    <div class="product-rate">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <div class="product-bottom">
+                                        <div class="product-price">
+                                            {% if product.discount_value %}
+                                            <del>${{ product.total_price }}</del>
+                                            {% endif %}
+                                            <span>${{ product.final_price }}</span>
+                                        </div>
+                                        <button type="button" class="product-cart-btn" data-bs-placement="left" data-tooltip="tooltip" title="Add To Cart">
+                                            <i class="far fa-shopping-bag"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <!-- pagination -->
+                <div class="pagination-area mb-0">
+                    <div aria-label="Page navigation example">
+                        <ul class="pagination">
+                            <li class="page-item">
+                                <a class="page-link" href="shop-grid.html#" aria-label="Previous">
+                                    <span aria-hidden="true"><i class="far fa-arrow-left"></i></span>
+                                </a>
+                            </li>
+                            <li class="page-item active"><a class="page-link" href="shop-grid.html#">1</a></li>
+                            <li class="page-item"><a class="page-link" href="shop-grid.html#">2</a></li>
+                            <li class="page-item"><span class="page-link">...</span></li>
+                            <li class="page-item"><a class="page-link" href="shop-grid.html#">10</a></li>
+                            <li class="page-item">
+                                <a class="page-link" href="shop-grid.html#" aria-label="Next">
+                                    <span aria-hidden="true"><i class="far fa-arrow-right"></i></span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- pagination end -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- shop-area end -->
+
+<!-- newsletter area -->
+<div class="newsletter-area pt-60 pb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mx-auto">
+                <div class="newsletter-content">
+                    <h3>Get <span>20%</span> Off Discount Coupon</h3>
+                    <p>By Subscribe Our Newsletter</p>
+                    <div class="subscribe-form">
+                        <form action="shop-grid.html#">
+                            <input type="email" class="form-control" placeholder="Your Valid Email Address">
+                            <button class="theme-btn" type="submit">
+                                Subscribe <i class="far fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="newsletter-img-1">
+        <img src="assets/img/newsletter/01.png" alt="">
+    </div>
+    <div class="newsletter-img-2">
+        <img src="assets/img/newsletter/02.png" alt="">
+    </div>
+</div>
+<!-- newsletter area end -->
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends "product/layouts/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- breadcrumb -->
+<div class="site-breadcrumb">
+    <div class="site-breadcrumb-bg" style="background: url({% static 'product/assets/img/breadcrumb/01.jpg' %})"></div>
+    <div class="container">
+        <div class="site-breadcrumb-wrap">
+            <h4 class="breadcrumb-title">Category One</h4>
+            <ul class="breadcrumb-menu">
+                <li><a href="index.html"><i class="far fa-home"></i> Home</a></li>
+                <li class="active">Category One</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- breadcrumb end -->
+
+<!-- category area -->
+<div class="category-area py-90">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="site-heading-inline">
+                    <h2 class="site-title"><img src="{% static 'product/assets/img/icon/category.svg' %}" alt="">All Category</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row g-2">
+            {% for category in categories %}
+            <div class="col-6 col-md-4 col-lg-2">
+                <div class="category-item">
+                    <a href="{{ category.get_absolute_url }}">
+                        <div class="category-info">
+                            <div class="icon">
+                                {% if category.icon %}
+                                <img src="{{ category.icon.url }}" alt="">
+                                {% else %}
+                                <img src="{% static 'product/assets/img/icon/no_image.svg' %}" alt="">
+                                {% endif %}
+                            </div>
+                            <div class="content">
+                                <h4>{{ category.name|truncatechars:20 }}</h4>
+                                <p>{{ category.product_count }} Items</p>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<!-- category area end-->
+
+<!-- newsletter area -->
+<div class="newsletter-area pt-60 pb-60">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 mx-auto">
+                <div class="newsletter-content">
+                    <h3>Get <span>20%</span> Off Discount Coupon</h3>
+                    <p>By Subscribe Our Newsletter</p>
+                    <div class="subscribe-form">
+                        <form action="category.html#">
+                            <input type="email" class="form-control" placeholder="Your Valid Email Address">
+                            <button class="theme-btn" type="submit">
+                                Subscribe <i class="far fa-paper-plane"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="newsletter-img-1">
+        <img src="{% static 'product/assets/img/newsletter/01.png' %}" alt="">
+    </div>
+    <div class="newsletter-img-2">
+        <img src="{% static 'product/assets/img/newsletter/02.png' %}" alt="">
+    </div>
+</div>
+<!-- newsletter area end -->
+
+{% endblock %}

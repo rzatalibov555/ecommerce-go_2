@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	{% include "product/partials/head.html" %}
+</head>
+
+<body>
+	{% include "product/partials/preloader.html" %}
+	<header class="header">
+		{% include "product/partials/topbar.html" %}
+		{% include "product/partials/middlebar.html" %}
+		{% include "product/partials/navbar.html" %}
+	</header>
+	<main class="main">
+		{% block content %}{% endblock %}
+	</main>
+	{% include "product/partials/footer.html" %}
+	{% include "product/partials/scroll.html" %}
+	{% include "product/partials/scripts.html" %}
+</body>
+
+</html>
