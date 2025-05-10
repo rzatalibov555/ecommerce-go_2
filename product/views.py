@@ -1,3 +1,4 @@
+
 from django.http import HttpResponseNotFound, Http404
 from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import (
@@ -8,11 +9,87 @@ from django.db.models import (
     Count,
 )
 from django.db.models.functions import Coalesce, Round
-from product.forms import ProductForm
+from product.forms import LoginForm, RegisterForm, ProductForm
 from product.models import *
 from urllib.parse import urlencode
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+
+def login_view(request):
+
+    if request.user.is_authenticated:
+        messages.info(request,"You are logged in.")
+        return redirect(reverse("product:index"))
+
+
+    form = LoginForm()
+
+    if request.method == "POST":
+        form = LoginForm(request.POST or None)
+
+        if form.is_valid():
+            username = form.cleaned_data.get("username")
+            password = form.cleaned_data.get("password")
+            user = authenticate(username=username, password=password)
+            print(user)
+            login(request, user)
+            return redirect('/')
+            
+        else:
+            print(form.errors)
+
+
+    context = {
+        "form":form
+    }    
+
+    return render(request, "product/login.html", context)
+
+
+
+def logout_view(request):
+    logout(request)
+
+    if not request.user.is_authenticated:
+        messages.info(request,"You are successfully logout.")
+        return redirect(reverse("product:index"))
+    return redirect("/")
+
+
+def register_view(request):
+    form = RegisterForm()
+
+    if request.method == "POST":
+        form = RegisterForm(request.POST or None)
+
+        if form.is_valid():
+            
+            new_user = form.save(commit=False)
+            password = form.cleaned_data.get("password")
+            new_user.set_password(password)
+            new_user.is_staff = True
+            new_user.save()
+
+            login(request, new_user)
+            return redirect("/")
+            
+
+        else:
+            print(form.errors)
+
+
+
+    context = {
+        "form" : form
+    }
+
+    return render(request, "product/register.html", context)
+
+
+
+
 
 
 def index(request):

@@ -38,7 +38,13 @@
 				<div class="header-middle-right">
 					<ul class="header-middle-list">
 						<li><a href="index.html#" class="list-item"><i class="far fa-user-circle"></i></a></li>
-						<li><a href="index.html#" class="list-item"><i class="far fa-arrows-rotate"></i><span>0</span></a></li>
+						{% if request.user.is_authenticated  %}
+							<li><a title="logout" href="{% url "product:logout" %}" class="list-item"><i class="far fa-sign-out"></i></a></li>
+						{% else  %}
+							<li><a title="login" href="{% url "product:login" %}" class="list-item"><i class="far fa-sign-in"></i></a></li>
+						{% endif %}
+						
+						
 						<li><a href="index.html#" class="list-item"><i class="far fa-heart"></i><span>0</span></a></li>
 						<li class="dropdown-cart">
 							<a href="index.html#" class="shop-cart list-item"><i class="far fa-shopping-bag"></i>

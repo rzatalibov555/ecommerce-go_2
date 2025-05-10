@@ -2,6 +2,27 @@
 {% load static %}
 
 {% block content %}
+<style>
+    .mes{
+        width: 100%;
+        min-height: 30px;
+        background: var(--theme-color);
+        color:white;
+        text-align: center;
+        font-size: 20px;
+
+    }
+</style>
+{% if messages %}
+    <ul class="mes">
+        {% for message in messages %}
+            <li>{{message}}</li>
+        {% endfor %}
+    </ul>
+
+{% endif %}
+
+
 <!-- hero slider -->
 <div class="hero-section">
     <div class="container">

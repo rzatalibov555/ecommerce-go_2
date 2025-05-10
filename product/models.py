@@ -137,14 +137,12 @@ class Gender(models.Model):
 
 # <================> AUTHOR MODEL <================> #
 class Author(SocialMedia, models.Model):
-    name = models.CharField(
-        max_length=300,
-        verbose_name="Ad",
-    )
-    surname = models.CharField(
-        max_length=300,
-        verbose_name="Soyad",
-    )
+    # username = models.CharField(max_length=100, verbose_name="İstiadəçi adı")
+    # password = models.CharField(max_length=100, verbose_name="Şifrə")
+    # email = models.EmailField(max_length=254, verbose_name="E-poçt")
+    
+    name = models.CharField(max_length=300, verbose_name="Ad",)
+    surname = models.CharField(max_length=300, verbose_name="Soyad",)
     image = models.FileField(
         upload_to="author/",
         validators=[
