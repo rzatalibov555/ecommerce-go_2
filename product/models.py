@@ -7,6 +7,7 @@ from django.core.validators import (
     FileExtensionValidator,
 )
 from ckeditor_uploader.fields import RichTextUploadingField
+from django.contrib.auth.hashers import make_password, check_password
 
 
 # <================> ABSTRACT MODELS <================> #
@@ -137,9 +138,9 @@ class Gender(models.Model):
 
 # <================> AUTHOR MODEL <================> #
 class Author(SocialMedia, models.Model):
-    # username = models.CharField(max_length=100, verbose_name="İstiadəçi adı")
-    # password = models.CharField(max_length=100, verbose_name="Şifrə")
-    # email = models.EmailField(max_length=254, verbose_name="E-poçt")
+    username = models.CharField(max_length=100, verbose_name="İstiadəçi adı",null=True)
+    password = models.CharField(max_length=100, verbose_name="Şifrə",null=True)
+    email = models.EmailField(max_length=254, verbose_name="E-poçt", null=True)
     
     name = models.CharField(max_length=300, verbose_name="Ad",)
     surname = models.CharField(max_length=300, verbose_name="Soyad",)
@@ -192,6 +193,12 @@ class Author(SocialMedia, models.Model):
             age -= 1
         return age
     
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def a_check_password(self, raw_password):
+        return check_password(raw_password, self.password)
+
     class Meta:
         verbose_name = "Author"
         verbose_name_plural = "Authors"

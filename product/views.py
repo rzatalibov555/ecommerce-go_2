@@ -1,13 +1,7 @@
 
 from django.http import HttpResponseNotFound, Http404
 from django.shortcuts import get_object_or_404, render, redirect
-from django.db.models import (
-    F,
-    FloatField,
-    DecimalField,
-    ExpressionWrapper,
-    Count,
-)
+from django.db.models import (F, FloatField, DecimalField, ExpressionWrapper, Count)
 from django.db.models.functions import Coalesce, Round
 from product.forms import LoginForm, RegisterForm, ProductForm
 from product.models import *
@@ -15,8 +9,9 @@ from urllib.parse import urlencode
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from product.forms import AuthorLoginForm
 
-
+# User model uzerinden Start
 def login_view(request):
 
     if request.user.is_authenticated:
@@ -33,7 +28,7 @@ def login_view(request):
             username = form.cleaned_data.get("username")
             password = form.cleaned_data.get("password")
             user = authenticate(username=username, password=password)
-            print(user)
+            # print(user)
             login(request, user)
             return redirect('/')
             
@@ -46,7 +41,6 @@ def login_view(request):
     }    
 
     return render(request, "product/login.html", context)
-
 
 
 def logout_view(request):
@@ -86,11 +80,66 @@ def register_view(request):
     }
 
     return render(request, "product/register.html", context)
+# User model uzerinden End
+
+
+
+# Author model uzerinden Start
+def a_login_view(request):
+     
+    if request.session.get("author_id"):
+        messages.error(request, "Diqqət! Siz artıq login olmusuz. Əvvəlcə profildən çıxın.")
+        return redirect("product:index")
+
+    form = AuthorLoginForm(request.POST or None)
+     
+    if request.method == "POST":
+
+        if form.is_valid():
+            username = form.cleaned_data["username"]
+            password = form.cleaned_data["password"]
+
+            try:
+                author = Author.objects.get(username=username)
+                
+                if author.a_check_password(password):
+                    request.session["author_id"] = author.id
+                    print(request.session["author_id"])
+                    return redirect('/')
+                else:
+                    messages.error(request, "İstifadəçi adı və ya şifrə yalnışdır.")
+
+            except Author.DoesNotExist:
+                messages.error(request, "Belə istifadəçi tapılmadı.")
+                
+        else:
+            messages.error(request, "Xəta! Yenidən cəhd edin!")
+
+    context = {
+        "form":form
+    }    
+
+    return render(request, "product/a_login.html", context)
+
+
+def a_logout_view(request):
+    if "author_id" in request.session:
+        del request.session["author_id"]
+        messages.info(request, "Ehh! Səni yenə gözləyəcəyəm. Tez qayıt! :(")
+    else:
+        messages.info(request, "Xeta!")
+    return redirect("/")
 
 
 
 
+def a_register_view(request):
+    ...
 
+def a_change_password_view(request):
+    ...
+
+# Author model uzerinden End
 
 def index(request):
     products_qs = Product.objects.annotate(

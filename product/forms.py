@@ -86,6 +86,24 @@ class RegisterForm(forms.ModelForm):
 
 
 
+# ================================ CUSTOM FORM ==========================================
+class AuthorLoginForm(forms.Form):
+
+    username = forms.CharField(label="İstifadəçi adı", max_length=150)
+    password = forms.CharField(label="Şifrə", widget=forms.PasswordInput)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["username"].widget.attrs["class"] = "form-control"
+        self.fields["password"].widget.attrs["class"] = "form-control"
+
+
+# ================================ CUSTOM FORM ==========================================
+
+
+
+
+
 
 class ProductForm(forms.ModelForm):
 
