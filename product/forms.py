@@ -3,9 +3,9 @@
 
 from django import forms
 from .models import Author, Product
-
+from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model, authenticate
-
+import re
 
 User = get_user_model()
 
@@ -43,7 +43,6 @@ class LoginForm(forms.ModelForm):
         for field in self.fields:
             self.fields[field].widget.attrs.update({"class": "form-control"})
             self.fields[field].required = True
-
 
 class RegisterForm(forms.ModelForm):
 
@@ -98,6 +97,53 @@ class AuthorLoginForm(forms.Form):
         self.fields["password"].widget.attrs["class"] = "form-control"
 
 
+class AuthorRegisterForm(forms.ModelForm):
+    # PasswordInput formasina salmaq ucun
+    password = forms.CharField(widget=forms.PasswordInput, max_length=16, required=True, label="Şifrə")
+    confirm_password = forms.CharField(widget=forms.PasswordInput, max_length=16, required=True, label="Şifrə təkrarı")
+    birthday = forms.CharField(widget=forms.DateInput, required=True)
+   
+   # form-control ve s. class ve xususiyyetler vermek ucun
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({"class": "form-control"})
+            # self.fields[field].required = True
+
+
+    class Meta:
+        model=Author
+        fields = ['username', 'email', 'name', 'surname','birthday', 'gender', 'image', 'bio', 'password']
+
+
+    def clean_username(self):
+        username = self.cleaned_data.get("username")
+
+        if Author.objects.filter(username=username).exists():
+            raise ValidationError("This username is already exists")
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+
+        if Author.objects.filter(email=email).exists():
+            raise ValidationError("This e-mail is already exists")
+        return email
+    
+    def clean(self):
+        cleaned_data = super().clean()
+        password = cleaned_data.get('password')
+        confirm  = cleaned_data.get('confirm_password')
+
+        if password != confirm:
+            raise ValidationError("Passwords dont match")
+        return cleaned_data
+
+
+class AuthorChangePassword(forms.Form):
+    ...
+    
+
 # ================================ CUSTOM FORM ==========================================
 
 
@@ -106,7 +152,6 @@ class AuthorLoginForm(forms.Form):
 
 
 class ProductForm(forms.ModelForm):
-
     # description = forms.CharField(widget=forms.Textarea(attrs={'cols':40, 'rows':5}))
 
     class Meta:

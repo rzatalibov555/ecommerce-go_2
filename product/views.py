@@ -9,7 +9,7 @@ from urllib.parse import urlencode
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from product.forms import AuthorLoginForm
+from product.forms import AuthorLoginForm, AuthorRegisterForm
 
 # User model uzerinden Start
 def login_view(request):
@@ -134,10 +134,32 @@ def a_logout_view(request):
 
 
 def a_register_view(request):
-    ...
+    if request.method == 'POST':
+        form = AuthorRegisterForm(request.POST, request.FILES)
+        if form.is_valid():
+            author = form.save(commit=False)
+            author.set_password(form.cleaned_data['password']) # hash the password
+            author.save()
+            messages.success(request, "Registration is succesfully")
+            return redirect('product:a_login')
+    else:
+        messages.error(request, "Xəta! Yenidən cəhd edin!")
+        form = AuthorRegisterForm()
+    
+    context = {
+        "form": form
+    }
+    return render(request, "product/a_register.html", context)
+
+    
 
 def a_change_password_view(request):
     ...
+
+    
+
+   
+    return render(request, "product/a_change_password.html")
 
 # Author model uzerinden End
 

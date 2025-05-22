@@ -138,8 +138,8 @@ class Gender(models.Model):
 
 # <================> AUTHOR MODEL <================> #
 class Author(SocialMedia, models.Model):
-    username = models.CharField(max_length=100, verbose_name="İstiadəçi adı",null=True)
-    password = models.CharField(max_length=100, verbose_name="Şifrə",null=True)
+    username = models.CharField(max_length=100, verbose_name="İstiadəçi adı", null=True)
+    password = models.CharField(max_length=100, verbose_name="Şifrə", null=True)
     email = models.EmailField(max_length=254, verbose_name="E-poçt", null=True)
     
     name = models.CharField(max_length=300, verbose_name="Ad",)
