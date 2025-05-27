@@ -13,14 +13,18 @@ urlpatterns = [
     path("categories/<int:category_id>/", views.category_products, name="category_products"),
 
     # Usermodel
-    path("login", views.login_view, name="login"),
-    path("logout", views.logout_view, name="logout"),
-    path("register", views.register_view, name="register"),
+    path("login/", views.login_view, name="login"),
+    path("logout/", views.logout_view, name="logout"),
+    path("register/", views.register_view, name="register"),
 
     # Custom
-    path("a_login", views.a_login_view, name="a_login"),
-    path("a_logout", views.a_logout_view, name="a_logout"),
-    path("a_register", views.a_register_view, name="a_register"),
-    path("a_change_password", views.a_change_password_view, name="a_change_password"),
+    path("a_login/", views.a_login_view, name="a_login"),
+    path("a_logout/", views.a_logout_view, name="a_logout"),
+    path("a_register/", views.a_register_view, name="a_register"),
+    
+    path("a_send_change_password/", views.a_send_change_password, name="a_send_change_password"),
+    path("a_confirm_change_password/<uuid:token>/", views.a_confirm_change_password, name="a_confirm_change_password"),
+
+
 
 ]

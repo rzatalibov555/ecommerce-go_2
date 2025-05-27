@@ -153,14 +153,18 @@ def a_register_view(request):
 
     
 
-def a_change_password_view(request):
+def a_send_change_password(request):
     ...
 
-    
-
-   
     return render(request, "product/a_change_password.html")
 
+
+def a_confirm_change_password(request):
+    ...
+
+
+
+    
 # Author model uzerinden End
 
 def index(request):
