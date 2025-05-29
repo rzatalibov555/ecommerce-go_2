@@ -1,15 +1,19 @@
 
-from django.http import HttpResponseNotFound, Http404
+from django.http import HttpResponseNotFound, Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import (F, FloatField, DecimalField, ExpressionWrapper, Count)
 from django.db.models.functions import Coalesce, Round
-from product.forms import LoginForm, RegisterForm, ProductForm
+from product.forms import AuthorResetChangePassword, LoginForm, RegisterForm, ProductForm
 from product.models import *
 from urllib.parse import urlencode
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from product.forms import AuthorLoginForm, AuthorRegisterForm
+
+from django.core.mail import send_mail
+from django.utils import timezone
+from django.conf import settings
 
 # User model uzerinden Start
 def login_view(request):
@@ -145,7 +149,7 @@ def a_register_view(request):
     else:
         messages.error(request, "Xəta! Yenidən cəhd edin!")
         form = AuthorRegisterForm()
-    
+
     context = {
         "form": form
     }
@@ -153,14 +157,67 @@ def a_register_view(request):
 
     
 
-def a_send_change_password(request):
-    ...
+def a_send_change_password_email(request):
+    
+    if request.method == "POST":
+        email  = request.POST.get("email")
+        author = Author.objects.filter(email=email).first()
 
+        if not author:
+            # return HttpResponse("Email is not found!")
+            messages.error(request, "Email is not found!")
+            return redirect('product:a_send_change_password_email')
+        
+        token = ChangePasswordToken.objects.create(author=author)
+
+        link = request.build_absolute_uri(
+            f"/a_confirm_change_password/{token.token}/"
+        )
+        
+        send_mail(
+            subject='Sifre yenilemek ucun',
+            message=f"Sifreni sifirlamaq ucun linke kecid alin: {link}",
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[email],
+        )
+
+        messages.success(request, "Check your email!")
+        return redirect("product:a_send_change_password_email")
+    
     return render(request, "product/a_change_password.html")
 
 
-def a_confirm_change_password(request):
-    ...
+def a_confirm_change_password(request, token):
+
+    token_obj = get_object_or_404(ChangePasswordToken, token=token)
+    
+    if token_obj.is_expired():
+        token_obj.delete()
+        messages.error(request, "Linkin vaxti bitmisdir!")
+        return redirect("product:a_send_change_password_email")
+
+   
+
+
+    if request.method == "POST":
+        form = AuthorResetChangePassword(request.POST)
+
+        if form.is_valid():
+            new_password = form.cleaned_data["password"]
+            author = token_obj.author
+            author.set_password(new_password)
+            author.save()
+            token_obj.delete()
+            messages.success(request, "Password is successfully changed!")
+            return redirect("product:a_login")
+            # return HttpResponse("Password is sucessfully changed!")
+    else:
+        form = AuthorResetChangePassword()
+
+    context = {
+        "form": form
+    }  
+    return render(request, "product/a_change_password_confirm.html", context)
 
 
 

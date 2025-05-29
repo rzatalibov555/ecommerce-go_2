@@ -140,16 +140,29 @@ class AuthorRegisterForm(forms.ModelForm):
         return cleaned_data
 
 
-class AuthorChangePassword(forms.Form):
-    ...
+class AuthorResetChangePassword(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["password"].widget.attrs["class"] = "form-control"
+        self.fields["confirm_password"].widget.attrs["class"] = "form-control"
+
+    password = forms.CharField(label="Yeni sifre", widget=forms.PasswordInput)
+    confirm_password = forms.CharField(label="Tekrar sifre", widget=forms.PasswordInput)
     
+    def clean(self):
+        cleaned_data = super().clean()
+
+        p1 = cleaned_data.get("password")
+        p2 = cleaned_data.get("confirm_password")
+
+        if p1 != p2:
+            raise ValidationError("Passwords dont match!")
+        if len(p1) < 8:
+            raise ValidationError("Passwords must be minimum 8 simbol!")
+        return cleaned_data
 
 # ================================ CUSTOM FORM ==========================================
-
-
-
-
-
 
 class ProductForm(forms.ModelForm):
     # description = forms.CharField(widget=forms.Textarea(attrs={'cols':40, 'rows':5}))

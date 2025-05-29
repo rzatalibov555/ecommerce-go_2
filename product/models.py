@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 from django.db import models
 from django.urls import reverse
 from django.core.validators import (
@@ -9,6 +9,8 @@ from django.core.validators import (
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.contrib.auth.hashers import make_password, check_password
 
+import uuid
+from django.utils import timezone
 
 # <================> ABSTRACT MODELS <================> #
 # <========> SOCIAL MEDIA MODEL <========> #
@@ -138,9 +140,10 @@ class Gender(models.Model):
 
 # <================> AUTHOR MODEL <================> #
 class Author(SocialMedia, models.Model):
-    username = models.CharField(max_length=100, verbose_name="İstiadəçi adı", null=True)
+
+    username = models.CharField(max_length=100, verbose_name="İstiadəçi adı", null=True, unique=True)
     password = models.CharField(max_length=100, verbose_name="Şifrə", null=True)
-    email = models.EmailField(max_length=254, verbose_name="E-poçt", null=True)
+    email = models.EmailField(max_length=254, verbose_name="E-poçt", null=True, unique=True)
     
     name = models.CharField(max_length=300, verbose_name="Ad",)
     surname = models.CharField(max_length=300, verbose_name="Soyad",)
@@ -204,6 +207,24 @@ class Author(SocialMedia, models.Model):
         verbose_name_plural = "Authors"
         ordering = ("-created_at",)
 
+# <================> TOKEN MODEL <================> #
+
+class ChangePasswordToken(models.Model):
+    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    token  = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def default_expire():
+        return timezone.now() + timedelta(hours=1)
+
+    expire_date = models.DateTimeField(default=default_expire)
+   
+    def is_expired(self):
+        return timezone.now() > self.created_at + timezone.timedelta(minutes=10)
+       
+
+    def __str__(self):
+        return f"{self.author.email} - {self.token}"
 
 # <================> PRODUCT MODEL <================> #
 class Product(models.Model):

@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-
+from django.utils import timezone
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -110,7 +110,8 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+# TIME_ZONE = "UTC"
+TIME_ZONE = "Asia/Baku"
 
 USE_I18N = True
 
@@ -152,7 +153,6 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'  # Пример для Gmail
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'bananasasasas1@gmail.com'
-EMAIL_HOST_PASSWORD = 'Murley2315'
+EMAIL_HOST_USER = 'mammadrza.talibov@gmail.com'
+EMAIL_HOST_PASSWORD = 'scyuyvzqezpajcxo' #app password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
-

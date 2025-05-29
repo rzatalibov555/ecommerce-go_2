@@ -22,7 +22,7 @@ urlpatterns = [
     path("a_logout/", views.a_logout_view, name="a_logout"),
     path("a_register/", views.a_register_view, name="a_register"),
     
-    path("a_send_change_password/", views.a_send_change_password, name="a_send_change_password"),
+    path("a_send_change_password_email/", views.a_send_change_password_email, name="a_send_change_password_email"),
     path("a_confirm_change_password/<uuid:token>/", views.a_confirm_change_password, name="a_confirm_change_password"),
 
 
