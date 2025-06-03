@@ -25,6 +25,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("ckeditor/", include("ckeditor_uploader.urls")),
     path("", include("product.urls", namespace="product")),
+
+    path("api/product/", include("product.api.urls")),
 ]
 
 handler404 = page_not_found
