@@ -3,7 +3,7 @@ from rest_framework import serializers
 from product.models import Product
 
 
-# Custom Serialize
+# # Custom Serialize
 class ProductSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
@@ -22,4 +22,13 @@ class ProductListSerializer(serializers.ModelSerializer):
     class Meta:
         model  = Product
         fields = '__all__'
-        # exclude = ("created_at", "updated_at") 
+        # exclude = ("created_at", "updated_at", "tags")
+
+
+class ProductCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        # fields = ("name","description", "price")
+        exclude = ("created_at", "updated_at", "status","poster")
+
+        

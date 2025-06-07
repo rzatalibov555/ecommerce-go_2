@@ -1,6 +1,24 @@
-
-{
-    "name":"Notebook",
-    "price":"2700",
-    "category": "Technology"
-}
+[
+    {
+        "name": "Notebook93",
+        "description": "Testing2",
+        "price": "3000",
+        "discount": "20",
+        "coupon": "10",
+        "category": "4",
+        "tax_price": "50",
+        "tags": [18, 15, 6],
+        "author":"9"
+    },
+    {
+        "name": "Notebook44",
+        "description": "Testing2",
+        "price": "3000",
+        "discount": "20",
+        "coupon": "10",
+        "category": "4",
+        "tax_price": "50",
+        "tags": [18, 11, 6],
+        "author":"9"
+    }
+]
