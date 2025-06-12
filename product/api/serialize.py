@@ -31,6 +31,7 @@ class ProductCreateSerializer(serializers.ModelSerializer):
         # fields = ("name","description", "price")
         exclude = ("created_at", "updated_at", "status","poster")
 
+        read_only_fields = ['author']
     
 class ProductUpdateSerializer(serializers.ModelSerializer):
     class Meta:
