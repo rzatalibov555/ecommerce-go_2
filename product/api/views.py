@@ -35,16 +35,16 @@ def annotate_products():
 def product_list_create_view(request):
     if request.method == "GET":
         products = annotate_products()
-        serializer = ProductListSerializer(products, many=True)
+        serializer =  ProductListSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
+    
     elif request.method == "POST":
         serializer = ProductCreateSerializer(data=request.data)
         if serializer.is_valid():
             try:
-                author = Author.objects.get(email=request.user.email)
+                author = Author.objects.get(username=request.user.username)
             except Author.DoesNotExist:
-                return Response({"error": "Author not found for this user"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": "Author not found"}, status=status.HTTP_404_NOT_FOUND)
 
             serializer.save(author=author)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
