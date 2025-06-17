@@ -33,7 +33,10 @@ class ProductCreateSerializer(serializers.ModelSerializer):
 
         read_only_fields = ['author']  # Author-u client tərəfdən göndərmək olmaz
     
+
+    
 class ProductUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         exclude = ("created_at", "updated_at", "status","poster")
+        read_only_fields = ['author']  # Author-u client tərəfdən göndərmək olmaz

@@ -5,8 +5,8 @@ app_name = "product/api"
 
 
 urlpatterns = [
-    path("products/", product_list_create_view, name="products_list_create"),
-    path("products/<int:id>", product_detail_view, name="products_detail"),
+    path("products/", product_list_create_view, name="products_list_create"), # "GET", "POST"
+    path("products/<int:id>", product_detail_view, name="products_detail"),   # "GET", "PUT", "PATCH", "DELETE"
 
 ]
 

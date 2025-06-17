@@ -3,6 +3,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
+from .permissions import IsAuthorAuthenticated  # yuxarıda yazdığımız custom permission
 
 # from product.api.serialize import ProductSerializer, ProductListSerializer, ProductCreateSerializer, ProductUpdateSerializer
 from product.api.serialize import (
@@ -31,7 +32,8 @@ def annotate_products():
     )
 
 @api_view(["GET", "POST"])
-@permission_classes([IsAuthenticatedOrReadOnly])
+# @permission_classes([IsAuthenticatedOrReadOnly])
+@permission_classes([IsAuthorAuthenticated])  # indi bu istifadə olunacaq
 def product_list_create_view(request):
     if request.method == "GET":
         products = annotate_products()
@@ -41,10 +43,12 @@ def product_list_create_view(request):
     elif request.method == "POST":
         serializer = ProductCreateSerializer(data=request.data)
         if serializer.is_valid():
+        
             try:
-                author = Author.objects.get(username=request.user.username)
-            except Author.DoesNotExist:
-                return Response({"error": "Author not found"}, status=status.HTTP_404_NOT_FOUND)
+                author_id = request.session.get("author_id")
+                author = Author.objects.get(id=author_id)
+            except (Author.DoesNotExist, TypeError):
+                return Response({"error": "Author not found in session"}, status=404)
 
             serializer.save(author=author)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -52,21 +56,31 @@ def product_list_create_view(request):
     
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
+# @permission_classes([IsAuthorAuthenticated])  # indi bu istifadə olunacaq
 def product_detail_view(request, id):
-    ...
+    pruduct = get_object_or_404(annotate_products(), id=id)
+    
+    if request.method == "GET":
+        serializer = ProductListSerializer(pruduct)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
+    elif request.method in ["PUT", "PATCH"]:
+        partial = request.method == "PATCH"  # True, False
 
+        serializer = ProductUpdateSerializer(pruduct, data=request.data, partial=partial)
 
+        if serializer.is_valid():
+            serializer.save()
+            #save olunduqdan sonra melumatlari ekrana cixarsin deye elave olunur
+            pruduct = get_object_or_404(annotate_products(), id=id)
+            serializer = ProductListSerializer(pruduct)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+    
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-
-
-
-
-
-
-
+    elif request.method == "DELETE":
+        pruduct.delete()
+        return Response({"message":"Mehsul ugurla silindi!"}, status=status.HTTP_204_NO_CONTENT)
 
 
 
