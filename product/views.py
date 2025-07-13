@@ -308,7 +308,8 @@ def product_list(request):
     return render(request, "product/products.html", context)
 
 
-def product_detail(request, product_id):
+# def product_detail(request, product_id):
+def product_detail(request, slug):
     product_qs = Product.objects.annotate(
         tax_value=Coalesce(F("tax_price"), 0.00, output_field=DecimalField()),
         discount_value=Coalesce(
@@ -334,7 +335,8 @@ def product_detail(request, product_id):
         ),
     )
 
-    single_product = product_qs.get(id=product_id)
+    single_product = product_qs.get(slug=slug)
+    # single_product = get_object_or_404(product_qs.get, slug=slug)
 
     product_tags = single_product.tags.all()
 

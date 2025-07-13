@@ -191,6 +191,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_editable = ("status",)
     list_per_page = 10
     readonly_fields = ("created_at_tag", "updated_at_tag")
+    prepopulated_fields = {"slug": ("name",)}
 
     inlines = (ProductImageInline,)
 

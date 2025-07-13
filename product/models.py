@@ -12,6 +12,10 @@ from django.contrib.auth.hashers import make_password, check_password
 import uuid
 from django.utils import timezone
 
+from product.utils.utils import unique_slugify
+
+
+
 # <================> ABSTRACT MODELS <================> #
 # <========> SOCIAL MEDIA MODEL <========> #
 class SocialMedia(models.Model):
@@ -232,6 +236,9 @@ class Product(models.Model):
         max_length=300,
         verbose_name="Ad",
     )
+
+    slug = models.SlugField(unique=True, blank=True, null=True, verbose_name="Slug")
+
     description = RichTextUploadingField(
         null=True,
         blank=True,
@@ -300,12 +307,21 @@ class Product(models.Model):
         verbose_name="Yenilənmə tarixi",
     )
 
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = unique_slugify(self, self.name)
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
 
+
     def get_absolute_url(self):
-        return reverse("product:product_detail", kwargs={"product_id": self.pk})
+        return reverse("product:product_detail", kwargs={"slug": self.slug})
     
+
+
     class Meta:
         verbose_name = "Product"
         verbose_name_plural = "Products"
